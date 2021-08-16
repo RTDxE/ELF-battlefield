@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+var start_pos: Vector2
+var target_pos: Vector2
+var target_obj: Node2D
+var count = 10
+var unit = preload(\"res://tmp/unit.tscn\")
+var units = []
+var half_width = 0
+var dir: Vector2
+
+func _ready() -> void:
+	for i in count:
+		var u = unit.instance()
+		add_child(u)
+		units.append(u)
+	half_width = (count - 1) * 20 / 2
+	dir = (target_pos - start_pos).normalized()
+
+
+func _process(delta: float) -> void:
+	var mmm = 1.0
+	var dist = target_pos.distance_to(global_position)
+	if dist < 16:
+		done()
+	if dist < 128:
+		mmm = dist / 128.0
+	else:
+		dist = start_pos.distance_to(global_position)
+		if dist < 128:
+			mmm = dist / 128.0
+	mmm = 1 - (1 - mmm) * (1 - mmm)
+	for u_id in units.size():
+		units[u_id].position.y = (u_id * 20 - half_width) * mmm
+	
+	global_position += dir * 200 * delta
+	look_at(target_pos)
+
+func done() -> void:
+	if target_obj.is_in_group(\"player_buildings\"):
+		target_obj.add(count)
+	else:
+		target_obj.conquer(count)
+	queue_free()
+
+"
+
+[node name="unit_line" type="Node2D"]
+script = SubResource( 1 )

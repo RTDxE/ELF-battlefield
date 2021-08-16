@@ -1,0 +1,213 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://icon.png" type="Texture" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+var sss = false
+var unit_line = preload(\"res://tmp/unit_line.tscn\")
+var start_point
+var start_obj
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.pressed:
+			sss = false
+			var b = get_tree().get_nodes_in_group(\"player_buildings\")
+			for n in b:
+				if get_global_mouse_position().distance_to(n.global_position) <= 32:
+					sss = true
+					start_point = n.global_position
+					start_obj = n
+					break
+		else:
+			if sss and start_point.distance_to(get_global_mouse_position()) > 64:
+				for n in get_tree().get_nodes_in_group(\"buildings\"):
+					if get_global_mouse_position().distance_to(n.global_position) <= 32:
+						
+						while true:
+							var c = start_obj.pick()
+							var ul = unit_line.instance()
+							ul.start_pos = start_point
+							ul.target_pos = n.global_position
+							ul.target_obj = n
+							ul.global_position = start_point
+							ul.count = c
+							add_child(ul)
+							if c != 10:
+								break
+							yield(get_tree().create_timer(0.25), \"timeout\")
+						break
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Sprite
+
+var count = 50
+export var max_count = 50
+var collect_time = 0.25
+
+func _ready() -> void:
+	count = max_count
+	while true:
+		if count < max_count:
+			count += 1
+		$Label.text = str(count)
+		yield(get_tree().create_timer(collect_time), \"timeout\")
+
+func conquer(c: int) -> void:
+	count -= c
+	if count < 0:
+		count *= -1
+		add_to_group(\"player_buildings\")
+		self_modulate = Color.red
+	$Label.text = str(count)
+
+func add(c: int) -> void:
+	count = count + c
+	$Label.text = str(count)
+
+func pick(percent: float = 1.0) -> int:
+	var c = count
+	count = clamp(count - 10, 0, count)
+	$Label.text = str(count)
+	return c - count
+"
+
+[node name="Node2D" type="Node2D"]
+script = SubResource( 1 )
+
+[node name="icon" type="Sprite" parent="." groups=[
+"buildings",
+"player_buildings",
+]]
+self_modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 263.058, 198.3 )
+texture = ExtResource( 1 )
+script = SubResource( 2 )
+
+[node name="Label" type="Label" parent="icon"]
+margin_left = -34.6423
+margin_top = -59.2042
+margin_right = 5.35764
+margin_bottom = -45.2042
+rect_scale = Vector2( 2, 2 )
+text = "50"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="icon2" type="Sprite" parent="." groups=[
+"buildings",
+]]
+position = Vector2( 306.42, 562.547 )
+texture = ExtResource( 1 )
+script = SubResource( 2 )
+max_count = 20
+
+[node name="Label" type="Label" parent="icon2"]
+margin_left = -34.6423
+margin_top = -59.2042
+margin_right = 5.35764
+margin_bottom = -45.2042
+rect_scale = Vector2( 2, 2 )
+text = "50"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="icon3" type="Sprite" parent="." groups=[
+"buildings",
+]]
+position = Vector2( 466.793, 443.915 )
+texture = ExtResource( 1 )
+script = SubResource( 2 )
+max_count = 20
+
+[node name="Label" type="Label" parent="icon3"]
+margin_left = -34.6423
+margin_top = -59.2042
+margin_right = 5.35764
+margin_bottom = -45.2042
+rect_scale = Vector2( 2, 2 )
+text = "50"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="icon4" type="Sprite" parent="." groups=[
+"buildings",
+]]
+position = Vector2( 734.812, 261.574 )
+texture = ExtResource( 1 )
+script = SubResource( 2 )
+max_count = 20
+
+[node name="Label" type="Label" parent="icon4"]
+margin_left = -34.6423
+margin_top = -59.2042
+margin_right = 5.35764
+margin_bottom = -45.2042
+rect_scale = Vector2( 2, 2 )
+text = "50"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="icon5" type="Sprite" parent="." groups=[
+"buildings",
+]]
+position = Vector2( 855.641, 516.412 )
+texture = ExtResource( 1 )
+script = SubResource( 2 )
+max_count = 20
+
+[node name="Label" type="Label" parent="icon5"]
+margin_left = -34.6423
+margin_top = -59.2042
+margin_right = 5.35764
+margin_bottom = -45.2042
+rect_scale = Vector2( 2, 2 )
+text = "50"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="icon6" type="Sprite" parent="." groups=[
+"buildings",
+]]
+position = Vector2( 589.818, 700.951 )
+texture = ExtResource( 1 )
+script = SubResource( 2 )
+max_count = 20
+
+[node name="Label" type="Label" parent="icon6"]
+margin_left = -34.6423
+margin_top = -59.2042
+margin_right = 5.35764
+margin_bottom = -45.2042
+rect_scale = Vector2( 2, 2 )
+text = "50"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="icon7" type="Sprite" parent="." groups=[
+"buildings",
+]]
+position = Vector2( 1123.55, 292.412 )
+texture = ExtResource( 1 )
+script = SubResource( 2 )
+max_count = 20
+
+[node name="Label" type="Label" parent="icon7"]
+margin_left = -34.6423
+margin_top = -59.2042
+margin_right = 5.35764
+margin_bottom = -45.2042
+rect_scale = Vector2( 2, 2 )
+text = "50"
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Code/Scenario/Battle.gd" type="Script" id=1]
+[ext_resource path="res://Objects/Builds/MainHouse.tscn" type="PackedScene" id=2]
+
+[node name="Battle" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="MainHouse" parent="." instance=ExtResource( 2 )]
+position = Vector2( 201.491, 546.147 )
+
+[node name="MainHouse2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1712.67, 546.147 )
+ENEMY_HOUSE = true
